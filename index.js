@@ -1,17 +1,30 @@
+// The function below uses recursion to find the number of routes that fully complete the grid
+
+function numberOfRoutes(grid,pos,playableCells,steps) {
+
+  let maxSteps = grid[0] * grid[1] - 1;
+  let count = 0;
+  let maxRoutes = [];
+
+  getRoutes(grid,pos,playableCells,steps);
+
+  return {
+    count,
+    routes: maxRoutes
+  };
+
 function getRoutes(grid,pos,playableCells,steps) {
-    if (!playableCells) {
+    if (!playableCells && !steps) {
       playableCells = new Set();
       for (let i = 0; i < grid[0]; i++) {
         for (let j = 0; j < grid[1]; j++) {
           playableCells.add(`${i}x${j}y`);
         }
-      }
-
+      };
+      playableCells.delete(`${pos[0]}x${pos[1]}y`);
     };
 
-    playableCells.delete(`${pos[0]}x${pos[1]}y`);
-    
-    console.log(playableCells);
+    if (Array.isArray(playableCells)) playableCells = new Set(playableCells);
 
     const options = [];
     const positions = [];
@@ -34,21 +47,23 @@ function getRoutes(grid,pos,playableCells,steps) {
         positions.push([pos[0], pos[1] - 1]);
       };
 
-    // if (options.length === 0) return null;
 
-    console.log(steps)
+    for (let i = 0; i < options.length; i++) {  
+      let cellsArray = Array.from(playableCells);
+      let index = cellsArray.indexOf(`${positions[i][0]}x${positions[i][1]}y`);
+      cellsArray.splice(index, 1);
 
-    options.forEach((el, i) => {
-      
-      // console.log(el);
-      // console.log(positions[i]);
-      console.log(playableCells);
-      // console.log([...steps, el]);
+      getRoutes(grid, positions[i], cellsArray, [...steps, options[i]])
+    };
 
-      getRoutes(grid, positions[i], playableCells, [...steps, el])
-    })
+    if (steps.length === grid[0] * grid[1] - 1) {
+      count++;
+      maxRoutes.push(steps);
+    };
+
   };
+};
 
-getRoutes([3, 3], [2, 2]);  
-  
-// currently, the problem is with the playable cells method, which seems to be persisting through multiple recursion calls 
+  console.log(
+numberOfRoutes([3, 3], [2, 2])
+);
