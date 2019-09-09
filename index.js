@@ -10,7 +10,7 @@ function numberOfRoutes(grid,pos,playableCells,steps) {
 
   return {
     count,
-    routes: maxRoutes
+    // routes: maxRoutes
   };
 
 function getRoutes(grid,pos,playableCells,steps) {
@@ -65,5 +65,7 @@ function getRoutes(grid,pos,playableCells,steps) {
 };
 
   console.log(
-numberOfRoutes([3, 3], [2, 2])
+numberOfRoutes([5, 5], [4, 4])
 );
+
+// Idea, make player plan to survive at least 7(?) steps into the future 
